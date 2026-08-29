@@ -24,7 +24,7 @@ const monadTestnet = {
   testnet: true,
 } as const
 
-// ✅ Read project ID from environment variable
+// Read project ID from environment variable
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
 
 export const wagmiConfig = getDefaultConfig({
