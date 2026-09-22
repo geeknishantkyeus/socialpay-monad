@@ -1,7 +1,6 @@
-import { http, createConfig } from '@wagmi/core'
+import { http } from '@wagmi/core'
 import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 
-// Monad Testnet
 const monadTestnet = {
   id: 10143,
   name: 'Monad Testnet',
@@ -24,14 +23,17 @@ const monadTestnet = {
   testnet: true,
 } as const
 
-// Read project ID from environment variable
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
 
-export const wagmiConfig = getDefaultConfig({
-  appName: 'SocialPayments',
-  projectId: projectId,
-  chains: [monadTestnet],
-  transports: {
-    [monadTestnet.id]: http('https://testnet-rpc.monad.xyz'),
-  },
-})
+export const wagmiConfig =
+  typeof window === 'undefined'
+    ? undefined
+    : getDefaultConfig({
+        appName: 'SocialPayments',
+        projectId,
+        chains: [monadTestnet],
+        ssr: false,
+        transports: {
+          [monadTestnet.id]: http('https://testnet-rpc.monad.xyz'),
+        },
+      })

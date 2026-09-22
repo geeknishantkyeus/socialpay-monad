@@ -4,9 +4,9 @@ pragma solidity ^0.8.21;
 contract SocialPayments {
     // --- Storage ---
     mapping(address => string) public usernames;
+    mapping(string => address) public usernameToAddress;
     mapping(address => uint256) public reputation;
     mapping(address => bool) public registered;
-    mapping(address => mapping(address => bool)) public hasInteracted;
 
     struct Payment {
         address from;
@@ -33,9 +33,10 @@ contract SocialPayments {
     function registerUser(string memory _username) public {
         require(bytes(_username).length > 0, "Username cannot be empty");
         require(!registered[msg.sender], "Already registered");
-        require(bytes(usernames[msg.sender]).length == 0, "Username taken");
+        require(usernameToAddress[_username] == address(0), "Username taken");
 
         usernames[msg.sender] = _username;
+        usernameToAddress[_username] = msg.sender;
         registered[msg.sender] = true;
         reputation[msg.sender] = 10; // Starting reputation
 
@@ -48,15 +49,7 @@ contract SocialPayments {
         require(bytes(_note).length <= 200, "Note too long");
         require(registered[_to], "Recipient not registered");
 
-        // Update interaction
-        hasInteracted[msg.sender][_to] = true;
-        hasInteracted[_to][msg.sender] = true;
-
-        // Send payment
-        (bool success, ) = _to.call{value: msg.value}("");
-        require(success, "Transfer failed");
-
-        // Store payment
+        // Store payment FIRST (Effects)
         paymentHistory[msg.sender].push(Payment({
             from: msg.sender,
             to: _to,
@@ -73,10 +66,15 @@ contract SocialPayments {
             timestamp: block.timestamp
         }));
 
-        // Update reputation
+        // Update reputation FIRST (Effects)
         reputation[msg.sender] += 1;
         reputation[_to] += 1;
 
+        // Send payment LAST (Interaction)
+        (bool success, ) = _to.call{value: msg.value}("");
+        require(success, "Transfer failed");
+
+        // Events AFTER (so they reflect final state)
         emit PaymentSent(msg.sender, _to, msg.value, _note);
         emit ReputationUpdated(msg.sender, reputation[msg.sender]);
         emit ReputationUpdated(_to, reputation[_to]);
@@ -96,5 +94,9 @@ contract SocialPayments {
 
     function getPaymentCount(address _user) public view returns (uint256) {
         return paymentHistory[_user].length;
+    }
+
+    function getAddressByUsername(string memory _username) public view returns (address) {
+        return usernameToAddress[_username];
     }
 }
