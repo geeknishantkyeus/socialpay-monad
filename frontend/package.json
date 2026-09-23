@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "node -e \"try { require('child_process').execSync('npm approve-scripts --allow-scripts-pending', { stdio: 'inherit' }); } catch (e) { console.log('approve-scripts skipped'); }\""
+    "lint": "next lint"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "2.0.0",
