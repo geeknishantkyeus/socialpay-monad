@@ -4,14 +4,7 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
   webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-      encoding: false,
-      'pino-pretty': false,
-    }
+    config.resolve.fallback = { fs: false, net: false, tls: false }
     return config
   },
 }

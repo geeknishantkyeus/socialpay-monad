@@ -23,7 +23,7 @@ const monadTestnet = {
   testnet: true,
 } as const
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'socialpay'
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
 
 export const wagmiConfig =
   typeof window === 'undefined'
