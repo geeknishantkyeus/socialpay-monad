@@ -5,7 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther, formatEther } from 'viem'
 import toast from 'react-hot-toast'
-import SocialPaymentsABI from '../../abi/SocialPayments.json'
+import SocialPaymentsABI from '../abi/SocialPayments.json'
 
 const CONTRACT_ADDRESS = '0x0F40999C09C85Dc9548170204C845C3BBf8780E0'
 
