@@ -195,11 +195,11 @@ function WalletContent() {
                     onChange={(e) => setRecipientInput(e.target.value)}
                     className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
                   />
-                  {recipientInput && !recipientInput.startsWith('0x') && resolvedFromUsername && resolvedFromUsername !== '0x0000000000000000000000000000000000000000' && (
+                  {recipientInput && !recipientInput.startsWith('0x') && typeof resolvedFromUsername === 'string' && resolvedFromUsername !== '0x0000000000000000000000000000000000000000' ? (
                     <p className="mt-1 text-sm text-purple-400">
-                      Resolved: {(resolvedFromUsername as string).slice(0, 6)}...{(resolvedFromUsername as string).slice(-4)}
+                      Resolved: {resolvedFromUsername.slice(0, 6)}...{resolvedFromUsername.slice(-4)}
                     </p>
-                  )}
+                  ) : null}
                 </div>
                 <input
                   type="text"
